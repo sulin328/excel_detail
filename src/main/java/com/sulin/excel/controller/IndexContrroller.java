@@ -117,7 +117,9 @@ public class IndexContrroller{
 		String fileName = filePath  + DateUtils.YYMM.format(new Date()) + "订单日报.xlsx";;
 		//开始解析生成文件；
 		try{
+			long st = System.currentTimeMillis();
 			exportDetailsToExcel(oldFileName,fileName);
+			System.out.println((System.currentTimeMillis()-st)+"毫秒");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -162,10 +164,10 @@ public class IndexContrroller{
 	    XSSFSheet sheet = xssfWorkbook.cloneSheet(lastSheet, DateUtils.MD.format(new Date()));
 	    
 	    //如果是月初，删除上个月除汇总以外的所有sheet
-	    /*if(DateUtils.isFirstDayOfMonth(new Date())) {
+	    if(DateUtils.isFirstDayOfMonth(new Date())) {
 	    	for(int i=1;i< xssfWorkbook.getNumberOfSheets()-1;i++)
 	    		xssfWorkbook.removeSheetAt(i);
-	    }*/
+	    }
 	    //开始处理数据；
 	    //拷贝数据；
 	    //以时间、合计做标志
@@ -196,6 +198,7 @@ public class IndexContrroller{
 	    		break;
 	    	//拷贝上一天的订单到昨日订单；
 	    	row.getCell(4).setCellValue(row.getCell(5).getNumericCellValue());
+	    	
 	    	origin = row.getCell(3).getStringCellValue();
 	    	row.getCell(5).setCellValue(2);
 	    	row.getCell(7).setCellValue(2.22);
@@ -220,31 +223,7 @@ public class IndexContrroller{
 			e.printStackTrace();
 		} 
 	    return true;
-	     
-	        /*
-	        
-	        ArrayList<ArrayList<String>> ans=new ArrayList<ArrayList<String>>();
-	        //遍历xlsx中的sheet
-	        for (int numSheet = 0; numSheet < xssfWorkbook.getNumberOfSheets(); numSheet++) {
-	            XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(numSheet);
-	            if (xssfSheet == null) {
-	                continue;
-	            }
-	            // 对于每个sheet，读取其中的每一行
-	            for (int rowNum = 0; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
-	                XSSFRow xssfRow = xssfSheet.getRow(rowNum);
-	                if (xssfRow == null) continue; 
-	                ArrayList<String> curarr=new ArrayList<String>();
-	                for(int columnNum = 0 ; columnNum<args.length ; columnNum++){
-	                	XSSFCell cell = xssfRow.getCell(args[columnNum]);
-	                	
-	                	curarr.add( Trim_str( getValue(cell) ) );
-	                }
-	                ans.add(curarr);
-	            }
-	        }
-	        return ans;*/
-	    }
+	}
 
 	private Integer getEffectiveSheet(XSSFWorkbook work,int index){
 		Integer indexAt = null;
@@ -261,21 +240,6 @@ public class IndexContrroller{
 		}
 		return indexAt;
 	}
-	
-/*	private static void updateFormula(XSSFWorkbook wb,XSSFSheet s,int row){
-        Row r=s.getRow(row);
-        Cell c=null;
-        FormulaEcaluator eval=null;
-        if(wb instanceof HSSFWorkbook)
-            eval=new HSSFFormulaEvaluator((HSSFWorkbook) wb);
-        else if(wb instanceof XSSFWorkbook)
-            eval=new XSSFFormulaEvaluator((XSSFWorkbook) wb);
-        for(int i=r.getFirstCellNum();i<r.getLastCellNum();i++){
-            c=r.getCell(i);
-            if(c.getCellType()==Cell.CELL_TYPE_FORMULA)
-                eval.evaluateFormulaCell(c);
-        }
-    }*/
 	
 	@RequestMapping("/")
 	public ModelAndView redIndex(HttpServletRequest request){
