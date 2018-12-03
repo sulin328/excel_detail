@@ -1,0 +1,21 @@
+{
+  "team":[{"team_code":"0","team_name":"郑州-泰国"},
+				{"team_code":"1","team_name":"郑州-日本"},
+				{"team_code":"2","team_name":"青岛晓凡"},
+				{"team_code":"3","team_name":"樊帅"},
+				{"team_code":"4","team_name":"台湾肖磊"},
+				{"team_code":"5","team_name":"任君团队"},
+				{"team_code":"6","team_name":"杨胜团队"},
+				{"team_code":"8","team_name":"北京泰国"}],
+   "region":[{"region_code":"0","region_name":"泰国"},
+				  {"region_code":"1","region_name":"台湾"},
+				  {"region_code":"2","region_name":"日本"},
+				  {"region_code":"3","region_name":"美国商城"},
+				  {"region_code":"4","region_name":"阿联酋"},
+				  {"region_code":"5","region_name":"沙特"},
+				  {"region_code":"6","region_name":"新加坡"},
+				  {"region_code":"7","region_name":"马来西亚坡"},
+				  {"region_code":"8","region_name":"美国"},
+				  {"region_code":"9","region_name":"香港"}
+				  ]
+}
