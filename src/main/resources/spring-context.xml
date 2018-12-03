@@ -16,8 +16,9 @@
             ">
 
 	<!-- 让扫描spring扫描这个包下所有的类，让标注spring注解的类生效 -->
-	<context:component-scan base-package="com.sulin.excel.*"></context:component-scan>
-	    <bean id="parentDataSource" abstract="true" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<context:component-scan base-package="com.sulin.excel.*"/>
+	
+	<bean id="parentDataSource" abstract="true" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="maxActive" value="30"/>
         <property name="maxWait" value="3000"/>
         <property name="minIdle" value="10"/>
@@ -29,10 +30,11 @@
     
     <bean id="dataSource" parent="parentDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-	      <property name="url" value="jdbc:mysql://127.0.0.1:3306/excel_detail?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull"/>
+	      <property name="url" value="jdbc:mysql://127.0.0.1:3306/excel_detail?serverTimezone=GMT%2B8&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull"/>
 	      <property name="username" value="root"/>
 	      <property name="password" value="123456"/>
 	</bean>
+	
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
     </bean>

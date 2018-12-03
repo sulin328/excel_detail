@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>吉客印 · 日单统计表</title>
+<title>aaaaaaa</title>
 
 
 <style type="text/css">
@@ -23,32 +23,6 @@
 	border-image: initial;
 }
 
- table {
-        /*为表格设置合并边框模型*/
-        border-collapse: collapse;
-        /*列宽由表格宽度和列宽度设定*/
-        table-layout: fixed;
-   }
-             
-td {
-     border: 1px solid #ddd;
-     /*允许在单词内换行。*/
-     word-break: break-word;
-     /*设置宽度*/
-     width: 100px;
- }
-
-/* table tbody {
-               display: block;
-               height: 400px;
-               width: 100%;
-               overflow-y: scroll;
-               overflow-x: scroll;
-            } */
-/* 
-td  {  
- white-space: nowrap;  
-} */
 </style>
 </head>
 <body>
@@ -59,7 +33,7 @@ td  {
 			<section class="mr30"> <header
 				class="comm-title all-article-title">
 			<h2 class="mt20">
-				<span class="mt20">吉客印 · 日单统计录入表</span>
+				<span class="mt20">cccccccccccc</span>
 			</h2>
 			</header>
 			<div class="clear"></div>
@@ -93,15 +67,20 @@ td  {
 					    </tr>
 					  </thead>
 						
-						<tbody>
+						<tbody id = "detail_input_tbody">
 						
 						</tbody>
 					</table>
 					</div>
 					<dd>
 						<section class="pt10"> <a href="javascript:void(0)"
-							onclick="addQuestions()" title=""
+							onclick="submitDetails()" title=""
 							class="comm-btn c-btn-4 bg-orange">提 交</a> </section>
+					</dd>
+					<dd>
+						<section class="pt10"> <a href="javascript:void(0)"
+							onclick="creatReport()" title=""
+							class="comm-btn c-btn-4 bg-orange">创 建</a> </section>
 					</dd>
 				</form>
 			</section>
@@ -121,20 +100,20 @@ td  {
 					</h3>
 				</dt>
 				<dd class="pl10">
-					<p class="c-999 mt10">1、这并不是一个很高大上的网站，所以功能一点也不丰富，也没有做很多非常复杂的验证，多以呢，请您提交内容一定规范啊，很是拜托了，也灰常感谢啦。</p>
-					<p class="c-999 mt10">2、第一条一定要好好看噢，不介意您多看几次的。</p>
-					<p class="c-999 mt10">3、哎呀，我也不知道说啥了，就这么多吧。</p>
+					<p class="c-999 mt10">1、**********</p>
+					<p class="c-999 mt10">2、************</p>
+					<p class="c-999 mt10">3、************</p>
 				</dd>
 			</dl>
 			<dl class="mt20">
 				<dt>
 					<h3>
-						<strong class="fsize14 c-666">二、这里没重点，我还想念首诗给你听：</strong>
+						<strong class="fsize14 c-666">二、**********</strong>
 					</h3>
 				</dt>
 				<dd class="pl10">
-					<p class="c-999 mt10">1、本着为方便大家统计订单做的，如果用的方便，以后有什么需求再添加吧。</p>
-					<p class="c-999 mt10">2、申明一下，我很厉害，真的。</p>
+					<p class="c-999 mt10">1、*****************</p>
+					<p class="c-999 mt10">2、************* </p>
 				</dd>
 			</dl>
 		</div>
@@ -146,9 +125,9 @@ td  {
 			var a = document.getElementsByTagName("section");
 			a[a.length - 1].style.display = 'none';
 		}
+		
 		function addOriginSaleInput(teamId) {
-			var tab = document.getElementsByTagName("tbody");
-			var tbody = tab[0];
+			var tbody = document.getElementById("detail_input_tbody");
 			$.ajax({
 						url : baselocation + "/mark_origin",
 						data : {
@@ -160,7 +139,7 @@ td  {
 						success : function(data) {
 							tbody.innerHTML = '';
 							var width = "20%";
-							for (var i = 0; i <= data.length; i++) {
+							for (var i = 0; i < data.length; i++) {
 								var origin = data[i];
 								var tr = tbody.insertRow(i);
 								tr.setAttribute("height", "40px");
@@ -175,40 +154,89 @@ td  {
 								td_2.setAttribute("width", width);
 								td_2.setAttribute("align", "center");
 								//td_2.innerHTML = '<input type="number" style="height:22px" class="h-r-s-box" name = "'+ origin.originId+'" value="" />';
-								td_2.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" name = "'+ origin.originId+'" value="" />';
+								td_2.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" value="" />';
 								
 								var td_3 = tr.insertCell(2);
 								td_3.setAttribute("width", width);
 								td_3.setAttribute("align", "center");
-								td_3.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" name = "'+ origin.originId+'" value="" />';
+								td_3.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" value="" />';
 								
 								var td_4 = tr.insertCell(3);
 								td_4.setAttribute("width", width);
 								td_4.setAttribute("align", "center");
-								td_4.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" name = "'+ origin.originId+'" value="" />';
+								td_4.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" value="" />';
 								
 								var td_5 = tr.insertCell(4);
 								td_5.setAttribute("width", width);
 								td_5.setAttribute("align", "center");
-								td_5.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" name = "'+ origin.originId+'" value="" />';
+								td_5.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" value="" />';
 								
 								var td_6 = tr.insertCell(5);
 								td_6.setAttribute("width", width);
 								td_6.setAttribute("align", "center");
-								td_6.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" name = "'+ origin.originId+'" value="" />';
+								td_6.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" value="" />';
 								
 								var td_7 = tr.insertCell(6);
 								td_7.setAttribute("width", width);
 								td_7.setAttribute("align", "center");
-								td_7.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" name = "'+ origin.originId+'" value="" />';
+								td_7.innerHTML = '<input type="number" style="height:22px" class="c-999 fsize16" value="" />';
 								
 								
 								var td_8 = tr.insertCell(7);
-								//td_3.setAttribute("width", "50%");
 								td_8.innerHTML = '<input type="hidden" value="'+teamId+'" name="teamId" />';
+								var td_9 = tr.insertCell(8);
+								td_9.innerHTML = '<input type="hidden" value="'+origin.originId+'" name="originId" />';
 							}
 						}
 					})
+		}
+		
+		function submitDetails(){
+			var data = [];
+			var index = 0;
+			var trs  =  $('#detail_input_tbody').find('tr');
+			trs.each(
+					function(){
+							var item ={};
+							item.count = ($(this).find('td:eq(1)').find('input'))[0].value;
+							item.name2 = ($(this).find('td:eq(2)').find('input'))[0].value;
+							item.name3 = ($(this).find('td:eq(3)').find('input'))[0].value;
+							item.name4 = ($(this).find('td:eq(4)').find('input'))[0].value;
+							item.name5 = ($(this).find('td:eq(5)').find('input'))[0].value;
+							item.name6 = ($(this).find('td:eq(6)').find('input'))[0].value;
+							item.teamId = ($(this).find('td:eq(7)').find('input'))[0].value;
+							item.originId = ($(this).find('td:eq(8)').find('input'))[0].value;
+							data[index]=item;
+							index = index+1;
+			});
+			data = JSON.stringify(data)
+			$.ajax({
+				url : baselocation + "/sava_detail",
+				data : {
+					"details" : data
+				},
+				dataType : "json",
+				type : "post",
+				async : false,
+				success : function(data) {
+					alert(data);
+				}	
+			})
+			
+		}
+		
+		function creatReport(){
+			$.ajax({
+				url : baselocation + "/creat_report",
+				data : {
+				},
+				dataType : "json",
+				type : "post",
+				async : false,
+				success : function(data) {
+					alert(data);
+				}	
+			})
 		}
 	</script>
 </body>
