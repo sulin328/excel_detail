@@ -1,13 +1,17 @@
 package com.sulin.excel.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sulin.excel.util.DateUtils;
 
 import lombok.Setter;
@@ -67,5 +71,48 @@ public class ExcelDetailDao {
 		}
 		return list;
 	}
-
+	
+	public int[] updataOrAddSalesData(final List<JSONObject> accounts) {
+		String sql = "insert into mark_sales_amount(TEAM_ID,ORIGIN_ID,ORDER_AMOUNT,ROI_INDEX,"
+				+ "GROUND_PRO,ALIVE_PRO,SINGLE_EARN,SALES_AMOUNT,COST_AMOUNT,CREATE_DATE) "
+				+ " values (?, ?, ?, ?, ?, ?, ?, ?,?,current_timestamp()) ON DUPLICATE KEY "
+				+ "UPDATE ORDER_AMOUNT=?,ROI_INDEX=?,GROUND_PRO=?,ALIVE_PRO=?,SINGLE_EARN=?,SALES_AMOUNT=?,COST_AMOUNT=?,CREATE_DATE=current_timestamp()";
+		int[] updateNum = null;
+        try {
+            updateNum = template.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    ps.setInt(1, accounts.get(i).getIntValue("teamId"));
+                    ps.setInt(2,accounts.get(i).getIntValue("originId"));
+                    ps.setInt(3,accounts.get(i).getIntValue("order_amount"));
+                    ps.setDouble(4,accounts.get(i).getDoubleValue("roi_index"));
+                    ps.setInt(5,accounts.get(i).getIntValue("ground_pro"));
+                    
+                    ps.setInt(6,accounts.get(i).getIntValue("alive_pro"));
+                    ps.setDouble(7,accounts.get(i).getDoubleValue("single_earn"));
+                    ps.setDouble(8,accounts.get(i).getDoubleValue("sales_amount"));
+                    ps.setDouble(9,accounts.get(i).getIntValue("cost_amount"));
+                    //ps.setString(10,"current_timestamp()");
+                    
+                    ps.setInt(10,accounts.get(i).getIntValue("order_amount"));
+                    ps.setDouble(11,accounts.get(i).getDoubleValue("roi_index"));
+                    ps.setInt(12,accounts.get(i).getIntValue("ground_pro"));
+                    
+                    ps.setInt(13,accounts.get(i).getIntValue("alive_pro"));
+                    ps.setDouble(14,accounts.get(i).getDoubleValue("single_earn"));
+                    ps.setDouble(15,accounts.get(i).getDoubleValue("sales_amount"));
+                    ps.setDouble(16,accounts.get(i).getIntValue("cost_amount"));
+                    //ps.setString(18, "current_timestamp()");
+                }
+                
+                @Override
+                public int getBatchSize() {
+                    return accounts.size();
+                }
+            });
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
+        return updateNum;
+	}
 }

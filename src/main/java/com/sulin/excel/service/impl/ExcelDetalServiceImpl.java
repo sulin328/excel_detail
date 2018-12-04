@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sulin.excel.dao.ExcelDetailDao;
 import com.sulin.excel.service.ExcelDetalService;
 
@@ -52,5 +53,15 @@ public class ExcelDetalServiceImpl implements ExcelDetalService {
 	@Override
 	public List<Map<String, Object>> getOriginByTeamId(int teamId) {
 		return excelDetailDao.getOriginByTeamId(teamId);
+	}
+
+	@Override
+	public boolean updataOrAddSalesData(List<JSONObject> accounts) {
+		int[] updataOrAddSalesData = excelDetailDao.updataOrAddSalesData(accounts);
+		for (int i : updataOrAddSalesData) {
+			System.out.println(i );
+		}
+		
+		return false;
 	}
 }

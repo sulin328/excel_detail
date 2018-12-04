@@ -152,50 +152,62 @@
 		
 		function submitDetails() {
 			var data = [];
-			var index = 0;
+			//var index = 0;
 			var trs = $('#detail_input_tbody').find('tr');
-			trs.each(function() {
-						var item = {};
-						item.order_amount = ($(this).find('td:eq(1)').find('input'))[0].value;
-						if(!isIntNum(item.order_amount)){
-							alertMsg("输入提示", "[今日订单]必须为非负整数值！")
-						}
+			for(var i = 0; i<trs.length;i++){
+				var item = {};
+				var tr = trs[i];
+				item.order_amount = ($(tr).find('td:eq(1)').find('input'))[0].value;
+				if(item.order_amount=='' || !isIntNum(item.order_amount)){
+					alert(item.order_amount=='');
+					alert(!isIntNum(item.order_amount));
+					alertMsg("输入提示", "[今日订单]必须为非负整数值！")
+					return false;
+				}
+				
+				item.roi_index = ($(tr).find('td:eq(2)').find('input'))[0].value;
+				if(item.roi_index == '' || !isNumber(item.roi_index)){
+					alertMsg("输入提示", "请在[ROI]处输入有效的数值！")
+					return false;
+				}
+				
+				item.ground_pro = ($(tr).find('td:eq(3)').find('input'))[0].value;
+				if(item.ground_pro==''|| !isIntNum(item.ground_pro)){
+					alertMsg("输入提示", "[上新]必须为非负整数值！")
+					return false;
+				}
+				
+				item.alive_pro = ($(tr).find('td:eq(4)').find('input'))[0].value;
+				if(item.alive_pro == ''||!isIntNum(item.alive_pro)){
+					alertMsg("输入提示", "请在[在线活跃产品]必须为非负整数值！")
+					return false;
+				}
+				
+				item.single_earn = ($(tr).find('td:eq(5)').find('input'))[0].value;
+				if(item.single_earn =='' ||!isNumber(item.single_earn)){
+					alertMsg("输入提示", "请在[单品产能]处输入有效的数值！")
+					return false;
+				}
+				
+				item.sales_amount = ($(tr).find('td:eq(6)').find('input'))[0].value;
+				if(item.sales_amount=='' || !isNumber(item.sales_amount)){
+					alertMsg("输入提示", "请在[销售额]处输入有效的数值！")
+					return false;
+				}
+				
+				item.cost_amount = ($(tr).find('td:eq(7)').find('input'))[0].value;
+				if(item.cost_amount == ''||!isNumber(item.cost_amount)){
+					alertMsg("输入提示", "请在[花费]处输入有效的数值！")
+					return false;
+				}
+				
+				item.teamId = ($(tr).find('td:eq(8)').find('input'))[0].value;
+				item.originId = ($(tr).find('td:eq(9)').find('input'))[0].value;
+				data[i] = item;
+			}
+			/* trs.each(function() {
 						
-						item.roi_index = ($(this).find('td:eq(2)').find('input'))[0].value;
-						if(!isNumber(item.roi_index)){
-							alertMsg("输入提示", "请在[ROI]处输入有效的数值！")
-						}
-						
-						item.ground_pro = ($(this).find('td:eq(3)').find('input'))[0].value;
-						if(!isIntNum(item.ground_pro)){
-							alertMsg("输入提示", "[上新]必须为非负整数值！")
-						}
-						
-						item.alive_pro = ($(this).find('td:eq(4)').find('input'))[0].value;
-						if(!isIntNum(item.alive_pro)){
-							alertMsg("输入提示", "请在[在线活跃产品]必须为非负整数值！")
-						}
-						
-						item.single_earn = ($(this).find('td:eq(5)').find('input'))[0].value;
-						if(!isNumber(item.single_earn)){
-							alertMsg("输入提示", "请在[单品产能]处输入有效的数值！")
-						}
-						
-						item.sales_amount = ($(this).find('td:eq(6)').find('input'))[0].value;
-						if(!isNumber(item.sales_amount)){
-							alertMsg("输入提示", "请在[销售额]处输入有效的数值！")
-						}
-						
-						item.cost_amount = ($(this).find('td:eq(7)').find('input'))[0].value;
-						if(!isNumber(item.cost_amount)){
-							alertMsg("输入提示", "请在[花费]处输入有效的数值！")
-						}
-						
-						item.teamId = ($(this).find('td:eq(8)').find('input'))[0].value;
-						item.originId = ($(this).find('td:eq(9)').find('input'))[0].value;
-						data[index] = item;
-						index = index + 1;
-					});
+					}); */
 			data = JSON.stringify(data)
 			$.ajax({
 				url : baselocation + "/sava_detail",
@@ -302,7 +314,7 @@
 		}
 		
 		function isIntNum(val){
-		    var regPos = / ^\d+$/; // 非负整数
+		    var regPos = /^\d+$/; // 非负整数
 		    return regPos.test(val);
 		}
 		

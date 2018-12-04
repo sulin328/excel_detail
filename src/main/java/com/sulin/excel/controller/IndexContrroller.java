@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sulin.excel.service.ExcelDetalService;
 import com.sulin.excel.util.DateUtils;
 
@@ -68,10 +69,6 @@ public class IndexContrroller{
 		List<Map<String,Object>> data = new ArrayList<>();
 		try{
 			data = excelDetalService.getOriginByTeamId(teamId);
-			/*//后台用户角色list页面
-			 
-			model.setViewName("/index");
-			model.addObject("origin",data);*/
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -82,17 +79,13 @@ public class IndexContrroller{
 	@ResponseBody
 	public String savaDetail(HttpServletRequest request,@ModelAttribute("details") String data){
 		JSONArray parse = JSONArray.parseArray(data);
-		String contextPath = request.getRealPath("/");
-		System.out.println(contextPath);
 		try{
-			//data = excelDetalService.getOriginByTeamId(teamId);
-			/*//后台用户角色list页面
-			 
-			model.setViewName("/index");
-			model.addObject("origin",data);*/
-			/*for (Object object : data) {
-				System.out.println(JSONObject.toJSONString(object));
-			}*/
+			List<JSONObject> accounts = new ArrayList<>();
+			for (int i =0 ; i < parse.size() ; i++) {
+				accounts.add(parse.getJSONObject(i));
+			}
+			boolean updataOrAddSalesData = excelDetalService.updataOrAddSalesData(accounts);
+			System.out.println("22222");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
