@@ -1,11 +1,14 @@
 package com.sulin.excel.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.sulin.excel.util.DateUtils;
 
 import lombok.Setter;
 
@@ -30,11 +33,35 @@ public class ExcelDetailDao {
 	}
 
 	public List<Map<String, Object>> getOriginByTeamId(int teamId) {
-		String sql = "select t.id as originId,t.origin_name originName from mark_origin t "
-				+ " inner join mark_team_origin tg on t.id = tg.origin_id where tg.team_id = ?";
+		String sql = "SELECT\r\n" + 
+				"	t.id AS originId,\r\n" + 
+				"	t.origin_name originName,\r\n" + 
+				"	p.ORDER_AMOUNT orderAmount,\r\n" + 
+				"	p.roi_index roiIndex,\r\n" + 
+				"	p.ground_pro groundPro,\r\n" + 
+				"	p.alive_pro alivePro,\r\n" + 
+				"	p.single_earn singleEarn,\r\n" + 
+				"	p.sales_amount salesAmount,\r\n" + 
+				"	p.cost_amount costAmount \r\n" + 
+				"FROM\r\n" + 
+				"	mark_origin t\r\n" + 
+				"	INNER JOIN mark_team_origin tg ON t.id = tg.origin_id\r\n" + 
+				"	LEFT JOIN (\r\n" + 
+				"SELECT\r\n" + 
+				"	* \r\n" + 
+				"FROM\r\n" + 
+				"	mark_sales_amount s \r\n" + 
+				"WHERE\r\n" + 
+				"	s.CREATE_DATE > DATE_FORMAT(?, \"%Y-%m-%d %H:%i:%s\" ) \r\n" + 
+				"	AND s.CREATE_DATE < DATE_FORMAT(?, \"%Y-%m-%d %H:%i:%s\" ) \r\n" + 
+				"	) p ON tg.TEAM_ID = p.TEAM_ID \r\n" + 
+				"	AND tg.ORIGIN_ID = p.ORIGIN_ID \r\n" + 
+				"WHERE\r\n" + 
+				"	tg.team_id = ?";
 		List<Map<String, Object>> list = null;
 		try {
-			list = template.queryForList(sql,teamId);
+			list = template.queryForList(sql,DateUtils.YYYYMMDD.format(new Date())+" 00:00:00",
+					DateUtils.YYYYMMDD.format(new Date())+" 23:59:59",teamId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

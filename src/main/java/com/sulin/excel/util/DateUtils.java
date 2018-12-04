@@ -10,6 +10,7 @@ public class DateUtils {
 	public static SimpleDateFormat YYMM = new SimpleDateFormat("yyyy年MM月"); 
 	public static SimpleDateFormat MD = new SimpleDateFormat("M.d"); 
 	public static SimpleDateFormat YYYYMD = new SimpleDateFormat("yyyy/M/d"); 
+	public static SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyy-MM-dd"); 
 	//判断日期是否是所在月的第一天
 	public static boolean isFirstDayOfMonth(Date date) {
 		Calendar calendar = Calendar.getInstance();
