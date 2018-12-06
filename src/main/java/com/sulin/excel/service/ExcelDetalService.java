@@ -1,14 +1,17 @@
 package com.sulin.excel.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
 public interface ExcelDetalService {
-	public List<Map<String, Object>> getAllTeam();
+	List<Map<String, Object>> getAllTeam();
 
-	public List<Map<String, Object>> getOriginByTeamId(int teamId);
+	List<Map<String, Object>> getOriginByTeamId(int teamId);
 	
-	boolean updataOrAddSalesData(List<JSONObject> accounts);
+	Map<String,Object> updataOrAddSalesData(List<JSONObject> accounts);
+
+	Map<String,Map<String,Map<String,Object>>> getAllAccountsByDate(Date expDate);
 }

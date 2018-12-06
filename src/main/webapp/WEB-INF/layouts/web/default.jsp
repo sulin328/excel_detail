@@ -35,6 +35,8 @@
 <script type="text/javascript" src="${ctx}/static/common/layer.js"></script>
 <script type="text/javascript" src="${ctx}/static/inxweb/header/header.js"></script>
 <script type="text/javascript" src="${ctx }/static/inxweb/js/common.js"></script>
+<script type="text/javascript" src="${ctx }/static/inxweb/upload-js/upload.js"></script>
+<script type="text/javascript" src="${ctx }/static/inxweb/upload-js/zepto.min.js"></script>
 
 <sitemesh:head></sitemesh:head>
 </head>

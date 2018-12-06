@@ -112,7 +112,25 @@ public class ExcelDetailDao {
             });
         } catch (Exception ex) {
            ex.printStackTrace();
+           return null;
         }
         return updateNum;
+	}
+
+	public List<Map<String, Object>> getAllAccountsByDate(Date expDate) {
+		String sql = "select m.TEAM_NAME teamName,o.ORIGIN_NAME originName,a.ORDER_AMOUNT orderAmount,a.roi_index roiIndex, "
+				+ " a.ground_pro groundPro,a.alive_pro alivePro,a.single_earn singleEarn,a.sales_amount salesAmount,a.cost_amount costAmount "
+				+ " from mark_team m INNER join mark_team_origin t on m.ID = t.TEAM_ID "
+				+ " INNER JOIN mark_origin o on t.ORIGIN_ID =o.ID LEFT JOIN "
+				+ " (select * from mark_sales_amount where CREATE_DATE >= STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s') and CREATE_DATE <= STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s')) a "
+				+ " on m.ID = a.TEAM_ID and o.ID =a.ORIGIN_ID " ;
+		List<Map<String, Object>> list = null;
+		try {
+			list = template.queryForList(sql,DateUtils.YYYYMMDD.format(expDate)+" 00:00:00",
+					DateUtils.YYYYMMDD.format(expDate)+" 23:59:59");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

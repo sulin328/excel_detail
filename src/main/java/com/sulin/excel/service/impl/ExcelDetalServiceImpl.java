@@ -1,6 +1,7 @@
 package com.sulin.excel.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,30 +25,6 @@ public class ExcelDetalServiceImpl implements ExcelDetalService {
 	@Override
 	public List<Map<String, Object>> getAllTeam() {
 		return excelDetailDao.getAllTeam();
-		/*List<Map<String,Object>> teams = excelDetailDao.getAllTeam();
-		List<Map<String,Object>> result = new ArrayList();
-		if(null != teams && !teams.isEmpty()) {
-			for (Map<String, Object> map : teams) {
-				String teamId = map.get("teamId").toString();
-				Map<String,Object> temp = null;
-				for (Map<String, Object> map2 : result) {
-					if(teamId.equals(map2.get("teamId").toString())) {
-						temp = map2;
-					}
-				}
-				if(null == temp) {
-					temp = new HashMap<>();
-					temp.put("teamId", teamId);
-					temp.put("teamName", map.get("teamName"));
-					temp.put("origin", new ArrayList());
-					result.add(temp);
-				}
-				if(null !=temp.get("origin") && (temp.get("origin") instanceof List)){
-					((List) temp.get("origin")).add(map);
-				}
-			}
-		}
-		return result;*/
 	}
 
 	@Override
@@ -56,12 +33,36 @@ public class ExcelDetalServiceImpl implements ExcelDetalService {
 	}
 
 	@Override
-	public boolean updataOrAddSalesData(List<JSONObject> accounts) {
+	public Map<String,Object> updataOrAddSalesData(List<JSONObject> accounts) {
+		Map<String,Object> map = new HashMap<>();
 		int[] updataOrAddSalesData = excelDetailDao.updataOrAddSalesData(accounts);
-		for (int i : updataOrAddSalesData) {
-			System.out.println(i );
+		if(null == updataOrAddSalesData) {
+			map.put("status", false);
+			map.put("msg", "数据保存失败，请检查数据是否填写规范正确，再次提交！");
+		}else {
+			map.put("status", true);
+			map.put("msg", "全部提交成功！");
 		}
-		
-		return false;
+		return map;
+	}
+
+	@Override
+	public Map<String,Map<String,Map<String,Object>>> getAllAccountsByDate(Date expDate) {
+		Map<String,Map<String,Map<String,Object>>> result = new HashMap<>();
+		List<Map<String,Object>> accounts = excelDetailDao.getAllAccountsByDate(expDate);
+		if(null != accounts&&accounts.size()>0) {
+			String str = "";
+			for (Map<String, Object> map : accounts) {
+				str = map.get("teamName").toString();
+				Map<String, Map<String, Object>> team = result.get(str);
+				if(null == team) {
+					team = new HashMap<>();
+					result.put(str, team);
+				}
+				str = map.get("originName").toString();
+				team.put(str, map);
+			}
+		}
+		return result;
 	}
 }
