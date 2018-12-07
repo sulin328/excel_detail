@@ -1,10 +1,12 @@
 package com.sulin.excel.service.impl;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,8 @@ public class ExcelDetalServiceImpl implements ExcelDetalService {
 	private ExcelDetailDao excelDetailDao;
 
 	@Override
-	public List<Map<String, Object>> getAllTeam() {
-		return excelDetailDao.getAllTeam();
+	public List<Map<String, Object>> getAllTeam(String isMod) {
+		return excelDetailDao.getAllTeam(isMod);
 	}
 
 	@Override
@@ -63,6 +65,26 @@ public class ExcelDetalServiceImpl implements ExcelDetalService {
 				team.put(str, map);
 			}
 		}
+		return result;
+	}
+
+	@Override
+	public Map<String, String> dataSubmitTeam() {
+		List<Map<String,Object>> allTeam = excelDetailDao.getAllTeam("needMod");
+		List<String> submited = excelDetailDao.getSubmitedTeam();
+		StringBuffer subStr = new StringBuffer();	
+		StringBuffer unSubStr = new StringBuffer();
+		for (Map<String,Object> map : allTeam) {
+			String strTemp = map.get("teamName").toString();
+			if(submited.contains(strTemp)) {
+				subStr.append(strTemp).append("、");
+			}else {
+				unSubStr.append(strTemp).append("、");
+			}
+		}
+		Map<String,String> result = new HashMap<>();
+		result.put("submited", subStr.substring(0, subStr.length()-1));
+		result.put("unSubmited", unSubStr.substring(0, unSubStr.length()-1));
 		return result;
 	}
 }

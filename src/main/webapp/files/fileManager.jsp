@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>日报平台</title>
+<title>吉客印日报平台</title>
 
 <link rel="stylesheet"
 	href="${ctx}/static/inxweb/upload-js/easy-upload.css">
@@ -21,34 +21,15 @@
 			<section class="mr30"> <header
 				class="comm-title all-article-title">
 			<h2 class="mt20">
-				<span class="mt20">报表和模板管理</span>
+				<span class="mt20">吉客印 • 报表和模板管理</span>
 			</h2>
 			</header>
-			<div class="mt20" style="height: 120px;">
+			<div class="mt20" style="height: 380px;">
 					<div id="easyContainer" ></div>
 			</div>
 			<div class="mt20">
 					<div id="easyContainer" ></div>
 			</div>
-		<div class="mt30 pl10" style="height: 310px;">
-			
-			<div class="clear"></div>
-			<dl class="mt20" >
-				<dt>
-					<h3>
-						<strong class="fsize16 c-666">${data_date}数据录入情况</strong>
-					</h3>
-				</dt>
-				<dd class="pl10">
-					<br/>
-					<option value="0" class="fsize14 c-666" style="color:#00A600;">已提交团队: ${info.submited}</option>
-					<br/>
-					<option value="0" class="fsize14 c-666" style="color:#FF5809;">未提交团队: ${info.unSubmited}</option>
-					<br/>
-					<p class="c-999 mt10" style="color:#00A600;">下载日报前，请先点击【生成日报】按钮，再点击【下载日报】；</p>
-				</dd>
-			</dl>
-		</div>
 			<dd>
 				<section class="pt10">
 				<a href="javascript:void(0)" onclick="creatReport()" title="" class="comm-btn c-btn-4 bg-orange">生 成 报 表</a> 
@@ -157,7 +138,7 @@
 		        "h+": this.getHours(), //小时 
 		        "m+": this.getMinutes(), //分 
 		        "s+": this.getSeconds(), //秒 
-		        "q+": Math.floor((this.getMonth() + 3 ) / 3), //季度 
+		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
 		        "S": this.getMilliseconds() //毫秒 
 		    };
 		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));

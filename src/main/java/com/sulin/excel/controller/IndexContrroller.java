@@ -1,12 +1,12 @@
 package com.sulin.excel.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -25,9 +26,11 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -51,9 +54,10 @@ public class IndexContrroller {
 
 	@RequestMapping("/index")
 	public ModelAndView index(HttpServletRequest request) {
+		String isMod = request.getParameter("modi_type");
 		ModelAndView model = new ModelAndView();
 		try {
-			List<Map<String, Object>> data = excelDetalService.getAllTeam();
+			List<Map<String, Object>> data = excelDetalService.getAllTeam(isMod);
 
 			// 后台用户角色list页面
 			model.setViewName("/index");
@@ -66,8 +70,12 @@ public class IndexContrroller {
 
 	@RequestMapping("/toFileManagerPage")
 	public ModelAndView toFileManagerPage(HttpServletRequest request) {
+		String type = request.getParameter("type");
 		ModelAndView model = new ModelAndView();
+		Map<String, String> submitTeam = excelDetalService.dataSubmitTeam();
 		model.setViewName("/fileManager");
+		model.addObject("info", submitTeam);
+		model.addObject("type", type);
 		return model;
 	}
 
@@ -110,71 +118,46 @@ public class IndexContrroller {
 		}
 		return result;
 	}
-
-	@RequestMapping("/downloadReport")
-	public Map<String,Object> export(HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
-		Date exportDate = new Date();
-		
-		String filePath = request.getRealPath("/") + "files";
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(exportDate);
-		calendar.add(Calendar.DATE, -1);
-		Date dataDate = calendar.getTime();
-
-		// 获取原文件路径
-		String fileName = "";
-		if (DateUtils.isFirstDayOfMonth(dataDate)) {
-			fileName = DateUtils.getPreMonthOfDate(dataDate);
-		} else {
-			fileName = DateUtils.YYMM.format(dataDate);
-		}
-		fileName += "订单日报.xlsx";
-
-		response.setContentType("text/html;charset=utf-8");
+	
+	@RequestMapping(value ="/donwloadfile", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> donwloadfile(HttpServletResponse response, HttpServletRequest request) throws Exception{
+        String fileName = request.getParameter("fileName");
 		try {
-			request.setCharacterEncoding("UTF-8");
+			fileName = new String(fileName.getBytes("ISO-8859-1"),"utf-8");
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		try {
-			File file = new File(filePath + File.separator + fileName);
-			long fileLength = file.length();
-			response.setContentType("application/x-msdownload;");
-			response.setHeader("Content-disposition",
-					"attachment; filename=" + new String(fileName.getBytes("utf-8"), "ISO8859-1"));
-			response.setHeader("Content-Length", String.valueOf(fileLength));
-			bis = new BufferedInputStream(new FileInputStream(file));
-			bos = new BufferedOutputStream(response.getOutputStream());
-			byte[] buff = new byte[2048];
-			int bytesRead;
-			while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-				bos.write(buff, 0, bytesRead);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (bis != null)
-				try {
-					bis.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			if (bos != null)
-				try {
-					bos.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		String filePath = request.getRealPath("/") + "files";
+		System.out.println(filePath + File.separator + fileName);
+		response.setCharacterEncoding("utf-8");
+        response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment;fileName="+java.net.URLEncoder.encode(fileName,"UTF-8"));
+		File file = new File(filePath + File.separator + fileName);
+		if(!file.exists()) {
+			System.out.println("文件不存在；");
 		}
-		return null;
-	}
-
+		
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(file);
+            os = response.getOutputStream();
+            byte[] b = new byte[2048];
+            int length;
+            while ((length = is.read(b)) > 0) {
+                os.write(b, 0, length);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            os.close();
+            is.close();
+        }
+        return null;
+    }
+	
 	@RequestMapping("/mark_origin")
 	@ResponseBody
 	public List<Map<String, Object>> teamMarket(HttpServletRequest request, @ModelAttribute("teamId") int teamId) {
@@ -440,14 +423,14 @@ public class IndexContrroller {
 			}
 
 			row.getCell(0).setCellValue(yestordy);
-			row.getCell(1).setCellFormula("'" + newSheetName + "'!F" + (countRowIndex + 1));
-			row.getCell(3).setCellFormula("'" + newSheetName + "'!L" + (countRowIndex + 1));
-			row.getCell(4).setCellFormula("'" + newSheetName + "'!M" + (countRowIndex + 1));
+			row.getCell(1).setCellValue(sheet.getRow(countRowIndex).getCell(5).getNumericCellValue());
+			row.getCell(3).setCellValue(sheet.getRow(countRowIndex).getCell(11).getNumericCellValue());
+			row.getCell(4).setCellValue(sheet.getRow(countRowIndex).getCell(12).getNumericCellValue());
 
 			row = sheetCount.getRow(dataCountRowIndex);
-			row.getCell(1).setCellFormula("'" + newSheetName + "'!F" + (countRowIndex + 1));
-			row.getCell(3).setCellFormula("'" + newSheetName + "'!L" + (countRowIndex + 1));
-			row.getCell(4).setCellFormula("SUM(B2:B" + (dataCountRowIndex - 1) + ")");
+			row.getCell(1).setCellFormula("SUM(B2:B" + dataCountRowIndex + ")");
+			row.getCell(3).setCellFormula("SUM(D2:D" + dataCountRowIndex + ")");
+			row.getCell(4).setCellFormula("SUM(E2:E" + dataCountRowIndex + ")");
 		}
 
 		FileOutputStream fileOut = null;

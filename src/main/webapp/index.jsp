@@ -3,9 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>吉客印日报平台</title>
-
-
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>日报平台</title>
 <style type="text/css">
 .origin {
 	color: rgb(85, 85, 85);
@@ -49,7 +48,7 @@
 			<section class="mr30"> <header
 				class="comm-title all-article-title">
 			<h2 class="mt20">
-				<span class="mt20">吉客印 • 日报录入</span>
+				<span class="mt20">日 报 录 入</span>
 			</h2>
 			</header>
 			<div class="clear"></div>
@@ -100,7 +99,7 @@
 				<dd>
 					<section class="pt10"> 
 						<a href="javascript:void(0)" onclick="submitDetails()" title="" class="comm-btn c-btn-4 bg-orange">提 交</a> 
-						<a href="javascript:void(0)" onclick="trunToFileManager()"  class="comm-btn c-btn-4 bg-orange">报 表 管 理</a>
+						<!-- <a href="javascript:void(0)" onclick="trunToFileManager()"  class="comm-btn c-btn-4 bg-orange">报 表 管 理</a> -->
 					</section>
 				</dd>
 			</form>
@@ -121,9 +120,9 @@
 					</h3>
 				</dt>
 				<dd class="pl10">
-					<p class="c-999 mt10">1、这不是一个完整的网站，最多算一个页面，谨为方便吉客印日报相关同学每天数据提交和报表生成；</p>
+					<p class="c-999 mt10">1、这不是一个完整的网站，最多算一个页面，谨为方便日报相关同学每天数据提交和报表生成；</p>
 					<p class="c-999 mt10">2、目前可支持工作日和节假日每天的数据录入和日报生成，不支持补单；原因是突然想懒一下，没加日期选择；</p>
-					<p class="c-999 mt10">3、数据只会保存最后一次提交，所以，感觉提交错了自觉重新提交一下就行了；</p>
+					<p class="c-999 mt10">3、每天，数据一旦提交团队就从列表消失，如需修改请联系日报统计人员；</p>
 					<p class="c-999 mt10">4、千万！每个团队自觉提交自己的数据，因为没有检验身份，所以默认同学们每次录入都是正确的；</p>
 					<p class="c-999 mt10">5、千万！技术大牛们别尝试验证这个页面的健壮性，因为服务器的性能，压测和DOS攻击奴家都是经不起的；</p>
 				</dd>
@@ -149,9 +148,9 @@
 			a[a.length - 1].style.display = 'none';
 		}
 		
-		function trunToFileManager() {
+		/* function trunToFileManager() {
 			window.location.href=baselocation+'/toFileManagerPage';
-		}
+		} */
 		
 		function submitDetails() {
 			var data = [];
@@ -268,7 +267,7 @@
 								td_2.setAttribute("align", "center");
 								td_2.className = "wenm";
 								//td_2.innerHTML = '<input type="number" style="height:22px" class="h-r-s-box" name = "'+ origin.originId+'" value="" />';
-								td_2.innerHTML = '<input type="number" style="height:22px;width:95px;" class="c-999 fsize16" defaultValue ="0.00" value= ="'+( origin.orderAmount>0 ? origin.orderAmount :"") + '"/>';
+								td_2.innerHTML = '<input type="number" style="height:22px;width:95px;" class="c-999 fsize16" defaultValue ="0" value="'+( origin.orderAmount>0 ? origin.orderAmount :"") + '" />';
 
 								var td_3 = tr.insertCell(2);
 								td_3.className = "wenm";
@@ -278,12 +277,12 @@
 								var td_4 = tr.insertCell(3);
 								td_4.className = "wenm";
 								td_4.setAttribute("align", "center");
-								td_4.innerHTML = '<input type="number" style="height:22px;width:95px;" class="c-999 fsize16" defaultValue ="0.00" value="'+( origin.groundPro>0 ? origin.groundPro :"") + '" />';
+								td_4.innerHTML = '<input type="number" style="height:22px;width:95px;" class="c-999 fsize16" defaultValue ="0" value="'+( origin.groundPro>0 ? origin.groundPro :"") + '" />';
 
 								var td_5 = tr.insertCell(4);
 								td_5.className = "wenm";
 								td_5.setAttribute("align", "center");
-								td_5.innerHTML = '<input type="number" style="height:22px;width:95px;" class="c-999 fsize16" defaultValue ="0.00" value="'+( origin.alivePro>0 ? origin.alivePro :"") + '" />';
+								td_5.innerHTML = '<input type="number" style="height:22px;width:95px;" class="c-999 fsize16" defaultValue ="0" value="'+( origin.alivePro>0 ? origin.alivePro :"") + '" />';
 
 								var td_6 = tr.insertCell(5);
 								td_6.className = "wenm";
@@ -322,7 +321,7 @@
 		}
 		
 		function isIntNum(val){
-		    var regPos = /^[1-9]\d*|0$/;;
+		    var regPos = /^[1-9]\d*|0$/;
 		    return regPos.test(val);
 		}
 		
